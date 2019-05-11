@@ -1,0 +1,26 @@
+[package]
+name = "pixops"
+version = "0.0.0"
+authors = ["Douglas Lau <doug.p.lau@gmail.com>"]
+description = "Pixel / raster image operations"
+license = "MIT OR Apache-2.0"
+documentation = "https://docs.rs/pixops"
+homepage = "https://github.com/DougLau/pixops"
+repository = "https://github.com/DougLau/pixops"
+readme = "README.md"
+keywords = ["image", "pixel", "compositing", "blend", "image-processing"]
+edition = "2018"
+
+[dependencies]
+pix = "0.4"
+
+[dev-dependencies]
+criterion = "0.2"
+
+[[bench]]
+name = "mask_over"
+harness = false
+
+[features]
+default = ["use-simd"]
+use-simd = []
