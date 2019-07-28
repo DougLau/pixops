@@ -49,8 +49,8 @@ mod test {
     use pix::*;
     #[test]
     fn raster_mask() {
-        let mut r = Raster::<Rgba8>::new(3, 3);
-        let mut m = Raster::<Mask8>::new(3, 3);
+        let mut r = RasterBuilder::<Rgba8>::new().with_clear(3, 3);
+        let mut m = RasterBuilder::<Mask8>::new().with_clear(3, 3);
         let c: Rgb8 = Rgb::new(0xFF, 0x80, 0x40);
         m.set_pixel(0, 0, 0xFF);
         m.set_pixel(1, 1, 0x80);
@@ -71,8 +71,8 @@ mod test {
     }
     #[test]
     fn smaller_mask() {
-        let mut r = Raster::<Rgba8>::new(3, 3);
-        let mut m = Raster::<Mask8>::new(2, 2);
+        let mut r = RasterBuilder::<Rgba8>::new().with_clear(3, 3);
+        let mut m = RasterBuilder::<Mask8>::new().with_clear(2, 2);
         let c: Rgba8 = Rgb::with_alpha(0x40, 0xFF, 0x80, Translucent::new(
             Ch8::new(0x80)));
         m.set_pixel(0, 0, 0xFF);
@@ -89,8 +89,8 @@ mod test {
     }
     #[test]
     fn top_left() {
-        let mut r = Raster::<Rgba8>::new(3, 3);
-        let mut m = Raster::<Mask8>::new(2, 2);
+        let mut r = RasterBuilder::<Rgba8>::new().with_clear(3, 3);
+        let mut m = RasterBuilder::<Mask8>::new().with_clear(2, 2);
         let c: Rgb8 = Rgb::new(0x20, 0x40, 0x80);
         m.set_pixel(0, 0, 0xFF);
         m.set_pixel(1, 0, 0xFF);
@@ -106,8 +106,8 @@ mod test {
     }
     #[test]
     fn bottom_right() {
-        let mut r = Raster::<Rgba8>::new(3, 3);
-        let mut m = Raster::<Mask8>::new(2, 2);
+        let mut r = RasterBuilder::<Rgba8>::new().with_clear(3, 3);
+        let mut m = RasterBuilder::<Mask8>::new().with_clear(2, 2);
         let c: Rgb8 = Rgb::new(0x20, 0x40, 0x80);
         m.set_pixel(0, 0, 0xFF);
         m.set_pixel(1, 0, 0xFF);
