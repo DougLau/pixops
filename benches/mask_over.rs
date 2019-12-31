@@ -3,9 +3,9 @@ extern crate criterion;
 extern crate pix;
 extern crate pixops;
 
+use criterion::Criterion;
 use pix::*;
 use pixops::*;
-use criterion::Criterion;
 
 fn mask_over_gray(c: &mut Criterion, sz: u32) {
     let s = format!("mask_over_gray_{}", sz);
@@ -55,8 +55,14 @@ fn mask_over_rgba_512(c: &mut Criterion) {
     mask_over_rgba(c, 512);
 }
 
-criterion_group!(benches, mask_over_gray_16, mask_over_gray_256,
-    mask_over_gray_512, mask_over_rgba_16, mask_over_rgba_256,
-    mask_over_rgba_512);
+criterion_group!(
+    benches,
+    mask_over_gray_16,
+    mask_over_gray_256,
+    mask_over_gray_512,
+    mask_over_rgba_16,
+    mask_over_rgba_256,
+    mask_over_rgba_512
+);
 
 criterion_main!(benches);

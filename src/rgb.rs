@@ -2,21 +2,24 @@
 //
 // Copyright (c) 2019  Douglas P Lau
 //
-use pix::{Alpha, Channel, Rgb};
-use crate::Blend;
 use crate::lerp::Lerp;
+use crate::Blend;
+use pix::{Alpha, Channel, Rgb};
 
 impl<C, A> Blend for Rgb<C, A>
-    where C: Channel + Lerp, A: Alpha<Chan=C>, A: From<C>
+where
+    C: Channel + Lerp,
+    A: Alpha<Chan = C>,
+    A: From<C>,
 {
-
     /// Blend pixels with `over` operation (slow fallback).
     ///
     /// * `dst` Destination pixels.
     /// * `src` Source pixels.
     /// * `clr` Mask color.
     fn over_fallback<B: Blend>(dst: &mut [Self], src: &[B], _clr: Self)
-        where Self: From<B>
+    where
+        Self: From<B>,
     {
         for (bot, top) in dst.iter_mut().zip(src) {
             // FIXME: combine with clr somehow!
