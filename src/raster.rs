@@ -62,10 +62,10 @@ mod test {
     fn raster_mask() {
         let mut r = RasterBuilder::<Rgba8>::new().with_clear(3, 3);
         let mut m = RasterBuilder::<Mask8>::new().with_clear(3, 3);
-        let c: Rgb8 = Rgb::new(0xFF, 0x80, 0x40);
         m.set_pixel(0, 0, 0xFF);
         m.set_pixel(1, 1, 0x80);
         m.set_pixel(2, 2, 0x40);
+        let c: Rgb8 = Rgb::new(0xFF, 0x80, 0x40);
         raster_over(&mut r, &m, c, 0, 0);
         let v = vec![
             0xFF, 0x80, 0x40, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -103,12 +103,9 @@ mod test {
     #[test]
     fn top_left() {
         let mut r = RasterBuilder::<Rgba8>::new().with_clear(3, 3);
-        let mut m = RasterBuilder::<Mask8>::new().with_clear(2, 2);
-        let c: Rgb8 = Rgb::new(0x20, 0x40, 0x80);
-        m.set_pixel(0, 0, 0xFF);
-        m.set_pixel(1, 0, 0xFF);
-        m.set_pixel(0, 1, 0xFF);
-        m.set_pixel(1, 1, 0xFF);
+        let m = RasterBuilder::<Mask8>::new().with_color(2, 2,
+            Mask8::new(0xFF));
+        let c = Rgb8::new(0x20, 0x40, 0x80);
         raster_over(&mut r, &m, c, -1, -1);
         let v = vec![
             0x20, 0x40, 0x80, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

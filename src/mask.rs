@@ -17,13 +17,12 @@ where
     /// * `dst` Destination pixels.
     /// * `src` Source pixels.
     /// * `clr` Mask color.
-    fn over_fallback<B: Blend>(dst: &mut [Self], src: &[B], _clr: Self)
+    fn over_fallback<B: Blend>(dst: &mut [Self], src: &[B], clr: Self)
     where
         Self: From<B>,
     {
         for (bot, top) in dst.iter_mut().zip(src) {
-            let s = Into::<Self>::into(*top);
-            // FIXME: use clr for src
+            let s = clr * Into::<Self>::into(*top);
             *bot = Blend::over(*bot, s);
         }
     }
