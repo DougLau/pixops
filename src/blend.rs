@@ -2,10 +2,10 @@
 //
 // Copyright (c) 2018-2019  Douglas P Lau
 //
-use pix::Format;
+use pix::{Format};
 
 /// Pixel format which can be blended.
-pub trait Blend: Format {
+pub trait Blend: Format { // FIXME: This trait should use iterators instead of slices?
     /// Blend pixels with `over` operation.
     ///
     /// * `dst` Destination pixels.

@@ -4,7 +4,7 @@
 //
 use pix::{Alpha, Ch16, Ch32, Ch8, Channel, Opaque, Translucent};
 
-// NOTE: Lerp euqation is: (1 - t) * v0 + t * v1
+// NOTE: Lerp equation is: (1 - t) * v0 + t * v1
 //          Equivalent to: v0 + t * (v1 - v0)
 pub trait Lerp {
     /// Linear interpolation
