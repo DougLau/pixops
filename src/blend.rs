@@ -5,7 +5,7 @@
 use pix::{Format};
 
 /// Pixel format which can be blended.
-pub trait Blend: Format { // FIXME: This trait should use iterators instead of slices?
+pub trait Blend: Format {
     /// Blend pixels with `over` operation.
     ///
     /// * `dst` Destination pixels.

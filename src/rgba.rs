@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2018-2019  Douglas P Lau
 //
-use pix::{Mask8, Rgba8};
+use pix::{Mask8, Rgb, Translucent, Associated};
 use crate::Blend;
 
 #[cfg(all(target_arch = "x86", feature = "simd"))]
@@ -10,7 +10,7 @@ use std::arch::x86::*;
 #[cfg(all(target_arch = "x86_64", feature = "simd"))]
 use std::arch::x86_64::*;
 
-impl Blend for Rgba8 {
+impl Blend for Rgb<Ch8, Translucent<Ch8>, Associated> {
     /// Blend pixels with an alpha mask.
     ///
     /// * `dst` Destination pixels.
