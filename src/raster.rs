@@ -26,7 +26,7 @@ pub fn raster_over<A, B, C>(
     A: From<C>,
 {
     assert_eq!(dst.alpha_mode(), AlphaMode::Associated);
-    assert_eq!(src.alpha_mode(), AlphaMode::Separated);
+    assert_eq!(src.alpha_mode(), AlphaMode::Associated);
 
     let clr = Into::<A>::into(clr);
     if x == 0
@@ -63,8 +63,12 @@ mod test {
     use pix::*;
     #[test]
     fn raster_mask() {
-        let mut r = RasterBuilder::<Rgba8>::new().with_clear(3, 3);
-        let mut m = RasterBuilder::<Mask8>::new().with_clear(3, 3);
+        let mut r = RasterBuilder::<Rgba8>::new()
+            .alpha_mode(AlphaMode::Associated)
+            .with_clear(3, 3);
+        let mut m = RasterBuilder::<Mask8>::new()
+            .alpha_mode(AlphaMode::Associated)
+            .with_clear(3, 3);
         m.set_pixel(0, 0, 0xFF);
         m.set_pixel(1, 1, 0x80);
         m.set_pixel(2, 2, 0x40);
@@ -94,9 +98,13 @@ mod test {
     }
     #[test]
     fn smaller_mask() {
-        let mut r = RasterBuilder::<Rgba8>::new().with_clear(3, 3);
-        let mut m = RasterBuilder::<Mask8>::new().with_clear(2, 2);
-        let c: Rgba8 = Rgb::with_alpha(0x40, 0xFF, 0x80, 0x80);
+        let mut r = RasterBuilder::<Rgba8>::new()
+            .alpha_mode(AlphaMode::Associated)
+            .with_clear(3, 3);
+        let mut m = RasterBuilder::<Mask8>::new()
+            .alpha_mode(AlphaMode::Associated)
+            .with_clear(2, 2);
+        let c: Rgba8 = Rgb::with_alpha(0x40, 0x80, 0x60, 0x80);
         m.set_pixel(0, 0, 0xFF);
         m.set_pixel(1, 0, 0x80);
         m.set_pixel(0, 1, 0x40);
@@ -109,19 +117,23 @@ mod test {
             0x00, 0x00, 0x00, 0x00,
 
             0x00, 0x00, 0x00, 0x00,
-            0x40, 0xFF, 0x80, 0x80,
-            0x20, 0x80, 0x40, 0x40,
+            0x40, 0x80, 0x60, 0x80,
+            0x20, 0x40, 0x30, 0x40,
 
             0x00, 0x00, 0x00, 0x00,
-            0x10, 0x40, 0x20, 0x20,
-            0x08, 0x20, 0x10, 0x10,
+            0x10, 0x20, 0x18, 0x20,
+            0x08, 0x10, 0x0C, 0x10,
         ];
         assert_eq!(r.as_u8_slice(), &v[..]);
     }
     #[test]
     fn top_left() {
-        let mut r = RasterBuilder::<Rgba8>::new().with_clear(3, 3);
-        let m = RasterBuilder::<Mask8>::new().with_color(2, 2, Mask8::new(0xFF));
+        let mut r = RasterBuilder::<Rgba8>::new()
+            .alpha_mode(AlphaMode::Associated)
+            .with_clear(3, 3);
+        let m = RasterBuilder::<Mask8>::new()
+            .alpha_mode(AlphaMode::Associated)
+            .with_color(2, 2, Mask8::new(0xFF));
         let c = Rgb8::new(0x20, 0x40, 0x80);
         raster_over(&mut r, &m, c, -1, -1);
         #[rustfmt::skip]
@@ -142,8 +154,12 @@ mod test {
     }
     #[test]
     fn bottom_right() {
-        let mut r = RasterBuilder::<Rgba8>::new().with_clear(3, 3);
-        let mut m = RasterBuilder::<Mask8>::new().with_clear(2, 2);
+        let mut r = RasterBuilder::<Rgba8>::new()
+            .alpha_mode(AlphaMode::Associated)
+            .with_clear(3, 3);
+        let mut m = RasterBuilder::<Mask8>::new()
+            .alpha_mode(AlphaMode::Associated)
+            .with_clear(2, 2);
         let c: Rgb8 = Rgb::new(0x20, 0x40, 0x80);
         m.set_pixel(0, 0, 0xFF);
         m.set_pixel(1, 0, 0xFF);
