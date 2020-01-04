@@ -3,7 +3,7 @@
 // Copyright (c) 2017-2019  Douglas P Lau
 //
 use crate::Blend;
-use pix::{Raster, AlphaMode};
+use pix::Raster;
 
 /// Blend targets with `over` operation.
 ///
