@@ -25,9 +25,6 @@ pub fn raster_over<A, B, C>(
     A: From<B>,
     A: From<C>,
 {
-    assert_eq!(dst.alpha_mode(), AlphaMode::Associated);
-    assert_eq!(src.alpha_mode(), AlphaMode::Associated);
-
     let clr: A = clr.into();
     if x == 0
         && dst.width() == src.width()
@@ -63,12 +60,8 @@ mod test {
     use pix::*;
     #[test]
     fn raster_mask() {
-        let mut r = RasterBuilder::<PremulRgba8>::new()
-            .alpha_mode(AlphaMode::Associated)
-            .with_clear(3, 3);
-        let mut m = RasterBuilder::<Mask8>::new()
-            .alpha_mode(AlphaMode::Associated)
-            .with_clear(3, 3);
+        let mut r = RasterBuilder::<PremulRgba8>::new().with_clear(3, 3);
+        let mut m = RasterBuilder::<Mask8>::new().with_clear(3, 3);
         m.set_pixel(0, 0, 0xFF);
         m.set_pixel(1, 1, 0x80);
         m.set_pixel(2, 2, 0x40);
@@ -98,12 +91,8 @@ mod test {
     }
     #[test]
     fn smaller_mask() {
-        let mut r = RasterBuilder::<PremulRgba8>::new()
-            .alpha_mode(AlphaMode::Associated)
-            .with_clear(3, 3);
-        let mut m = RasterBuilder::<Mask8>::new()
-            .alpha_mode(AlphaMode::Associated)
-            .with_clear(2, 2);
+        let mut r = RasterBuilder::<PremulRgba8>::new().with_clear(3, 3);
+        let mut m = RasterBuilder::<Mask8>::new().with_clear(2, 2);
         let c: PremulRgba8 = PremulRgba8::with_alpha(0x40, 0x80, 0x60, 0x80);
         m.set_pixel(0, 0, 0xFF);
         m.set_pixel(1, 0, 0x80);
@@ -128,12 +117,8 @@ mod test {
     }
     #[test]
     fn top_left() {
-        let mut r = RasterBuilder::<PremulRgba8>::new()
-            .alpha_mode(AlphaMode::Associated)
-            .with_clear(3, 3);
-        let m = RasterBuilder::<Mask8>::new()
-            .alpha_mode(AlphaMode::Associated)
-            .with_color(2, 2, Mask8::new(0xFF));
+        let mut r = RasterBuilder::<PremulRgba8>::new().with_clear(3, 3);
+        let m = RasterBuilder::<Mask8>::new().with_color(2, 2, Mask8::new(0xFF));
         let c: PremulRgba8 = PremulRgba8::new(0x20, 0x40, 0x80).into();
         raster_over(&mut r, &m, c, -1, -1);
         #[rustfmt::skip]
@@ -154,12 +139,8 @@ mod test {
     }
     #[test]
     fn bottom_right() {
-        let mut r = RasterBuilder::<PremulRgba8>::new()
-            .alpha_mode(AlphaMode::Associated)
-            .with_clear(3, 3);
-        let mut m = RasterBuilder::<Mask8>::new()
-            .alpha_mode(AlphaMode::Associated)
-            .with_clear(2, 2);
+        let mut r = RasterBuilder::<PremulRgba8>::new().with_clear(3, 3);
+        let mut m = RasterBuilder::<Mask8>::new().with_clear(2, 2);
         let c: PremulRgba8 = PremulRgba8::new(0x20, 0x40, 0x80).into();
         m.set_pixel(0, 0, 0xFF);
         m.set_pixel(1, 0, 0xFF);
