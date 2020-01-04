@@ -6,7 +6,7 @@ use crate::lerp::Lerp;
 use crate::Blend;
 use pix::{Alpha, Channel, Mask};
 
-impl<C, A> Blend for Mask<C, A>
+impl<C, A> Blend for Mask<A>
 where
     C: Channel + Lerp,
     A: Alpha<Chan = C>,
