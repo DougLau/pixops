@@ -4,15 +4,15 @@
 //
 use crate::lerp::Lerp;
 use crate::Blend;
-use pix::{Alpha, Channel, Gray, AlphaMode2, GammaMode2};
+use pix::{Alpha, Channel, Gray, AlphaMode, GammaMode};
 
 impl<C, A, M, G> Blend for Gray<C, A, M, G>
 where
     C: Channel + Lerp,
     A: Alpha<Chan = C>,
     A: From<C>,
-    M: AlphaMode2,
-    G: GammaMode2,
+    M: AlphaMode,
+    G: GammaMode,
 {
     /// Blend pixels with `over` operation (slow fallback).
     ///
