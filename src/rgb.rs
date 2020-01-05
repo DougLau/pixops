@@ -4,9 +4,9 @@
 //
 use crate::lerp::Lerp;
 use crate::Blend;
-use pix::{Alpha, Channel, Rgb, Associated, GammaMode};
+use pix::{Alpha, Channel, Rgb, AssociatedAlpha, GammaMode};
 
-impl<C, A, G> Blend for Rgb<C, A, Associated, G>
+impl<C, A, G> Blend for Rgb<C, A, AssociatedAlpha, G>
 where
     C: Channel + Lerp,
     A: Alpha<Chan = C>,
@@ -43,13 +43,12 @@ where
 #[cfg(test)]
 mod tests {
     use super::Blend;
-    use pix::{Ch8, Translucent, Associated, Opaque, Srgb};
 
     #[test]
     fn rgba8_transparent() {
         // Test if transparent blending works.
-        let t = pix::Rgb::<Ch8, Translucent<Ch8>, Associated, Srgb>::with_alpha(0x00, 0x00, 0x00, 0x00);
-        let p = pix::Rgb::<Ch8, Translucent<Ch8>, Associated, Srgb>::with_alpha(20, 40, 80, 160);
+        let t = pix::PremulRgba8::with_alpha(0x00, 0x00, 0x00, 0x00);
+        let p = pix::PremulRgba8::with_alpha(20, 40, 80, 160);
 
         let r1 = Blend::over(t, p);
         let r2 = Blend::over(p, t);
@@ -60,8 +59,8 @@ mod tests {
 
     #[test]
     fn transparent_over_white() {
-        let t = pix::Rgb::<Ch8, Translucent<Ch8>, Associated, Srgb>::with_alpha(0x00, 0x00, 0x00, 0x00);
-        let p = pix::Rgb::<Ch8, Opaque<_>, Associated, Srgb>::new(0xFF, 0xFF, 0xFF).into();
+        let t = pix::PremulRgba8::with_alpha(0x00, 0x00, 0x00, 0x00);
+        let p = pix::PremulRgba8::new(0xFF, 0xFF, 0xFF);
 
         let r = Blend::over(p, t);
 
