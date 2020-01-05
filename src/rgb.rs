@@ -4,7 +4,7 @@
 //
 use crate::lerp::Lerp;
 use crate::Blend;
-use pix::{Alpha, Channel, Rgb, AssociatedAlpha, GammaMode};
+use pix::{Alpha, AssociatedAlpha, Channel, GammaMode, Rgb};
 
 impl<C, A, G> Blend for Rgb<C, A, AssociatedAlpha, G>
 where

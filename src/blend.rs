@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2018-2019  Douglas P Lau
 //
-use pix::{Format};
+use pix::Format;
 
 /// Pixel format which can be blended.
 pub trait Blend: Format {

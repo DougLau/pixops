@@ -118,7 +118,8 @@ mod test {
     #[test]
     fn top_left() {
         let mut r = RasterBuilder::<PremulRgba8>::new().with_clear(3, 3);
-        let m = RasterBuilder::<Mask8>::new().with_color(2, 2, Mask8::new(0xFF));
+        let m =
+            RasterBuilder::<Mask8>::new().with_color(2, 2, Mask8::new(0xFF));
         let c: PremulRgba8 = PremulRgba8::new(0x20, 0x40, 0x80).into();
         raster_over(&mut r, &m, c, -1, -1);
         #[rustfmt::skip]

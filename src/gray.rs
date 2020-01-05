@@ -4,7 +4,7 @@
 //
 use crate::lerp::Lerp;
 use crate::Blend;
-use pix::{Alpha, Channel, Gray, AlphaMode, GammaMode};
+use pix::{Alpha, AlphaMode, Channel, GammaMode, Gray};
 
 impl<C, A, M, G> Blend for Gray<C, A, M, G>
 where
