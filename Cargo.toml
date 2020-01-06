@@ -24,3 +24,6 @@ harness = false
 [features]
 default = ["simd"]
 simd = []
+
+[replace]
+"pix:0.7.0" = { path = "../pix" }
