@@ -60,12 +60,12 @@ mod test {
     use pix::*;
     #[test]
     fn raster_mask() {
-        let mut r = RasterBuilder::<PremulRgba8>::new().with_clear(3, 3);
+        let mut r = RasterBuilder::<AssocSRgba8>::new().with_clear(3, 3);
         let mut m = RasterBuilder::<Mask8>::new().with_clear(3, 3);
         m.set_pixel(0, 0, 0xFF);
         m.set_pixel(1, 1, 0x80);
         m.set_pixel(2, 2, 0x40);
-        let c: PremulRgba8 = PremulRgba8::new(0xFF, 0x80, 0x40).into();
+        let c: AssocSRgba8 = AssocSRgba8::new(0xFF, 0x80, 0x40).into();
         raster_over(&mut r, &m, c, 0, 0);
         #[rustfmt::skip]
         let v = [
@@ -91,9 +91,9 @@ mod test {
     }
     #[test]
     fn smaller_mask() {
-        let mut r = RasterBuilder::<PremulRgba8>::new().with_clear(3, 3);
+        let mut r = RasterBuilder::<AssocSRgba8>::new().with_clear(3, 3);
         let mut m = RasterBuilder::<Mask8>::new().with_clear(2, 2);
-        let c: PremulRgba8 = PremulRgba8::with_alpha(0x40, 0x80, 0x60, 0x80);
+        let c: AssocSRgba8 = AssocSRgba8::with_alpha(0x40, 0x80, 0x60, 0x80);
         m.set_pixel(0, 0, 0xFF);
         m.set_pixel(1, 0, 0x80);
         m.set_pixel(0, 1, 0x40);
@@ -117,10 +117,10 @@ mod test {
     }
     #[test]
     fn top_left() {
-        let mut r = RasterBuilder::<PremulRgba8>::new().with_clear(3, 3);
+        let mut r = RasterBuilder::<AssocSRgba8>::new().with_clear(3, 3);
         let m =
             RasterBuilder::<Mask8>::new().with_color(2, 2, Mask8::new(0xFF));
-        let c: PremulRgba8 = PremulRgba8::new(0x20, 0x40, 0x80).into();
+        let c: AssocSRgba8 = AssocSRgba8::new(0x20, 0x40, 0x80).into();
         raster_over(&mut r, &m, c, -1, -1);
         #[rustfmt::skip]
         let v = [
@@ -140,9 +140,9 @@ mod test {
     }
     #[test]
     fn bottom_right() {
-        let mut r = RasterBuilder::<PremulRgba8>::new().with_clear(3, 3);
+        let mut r = RasterBuilder::<AssocSRgba8>::new().with_clear(3, 3);
         let mut m = RasterBuilder::<Mask8>::new().with_clear(2, 2);
-        let c: PremulRgba8 = PremulRgba8::new(0x20, 0x40, 0x80).into();
+        let c: AssocSRgba8 = AssocSRgba8::new(0x20, 0x40, 0x80).into();
         m.set_pixel(0, 0, 0xFF);
         m.set_pixel(1, 0, 0xFF);
         m.set_pixel(0, 1, 0xFF);

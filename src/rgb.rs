@@ -47,8 +47,8 @@ mod tests {
     #[test]
     fn rgba8_transparent() {
         // Test if transparent blending works.
-        let t = pix::PremulRgba8::with_alpha(0x00, 0x00, 0x00, 0x00);
-        let p = pix::PremulRgba8::with_alpha(20, 40, 80, 160);
+        let t = pix::AssocSRgba8::with_alpha(0x00, 0x00, 0x00, 0x00);
+        let p = pix::AssocSRgba8::with_alpha(20, 40, 80, 160);
 
         let r1 = Blend::over(t, p);
         let r2 = Blend::over(p, t);
@@ -59,8 +59,8 @@ mod tests {
 
     #[test]
     fn transparent_over_white() {
-        let t = pix::PremulRgba8::with_alpha(0x00, 0x00, 0x00, 0x00);
-        let p = pix::PremulRgba8::new(0xFF, 0xFF, 0xFF);
+        let t = pix::AssocSRgba8::with_alpha(0x00, 0x00, 0x00, 0x00);
+        let p = pix::AssocSRgba8::new(0xFF, 0xFF, 0xFF);
 
         let r = Blend::over(p, t);
 
