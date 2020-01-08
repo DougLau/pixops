@@ -1,7 +1,5 @@
 #[macro_use]
 extern crate criterion;
-extern crate pix;
-extern crate pixops;
 
 use criterion::Criterion;
 use pix::*;
@@ -10,12 +8,12 @@ use pixops::*;
 fn mask_over_gray(c: &mut Criterion, sz: u32) {
     let s = format!("mask_over_gray_{}", sz);
     c.bench_function(&s, move |b| {
-        let mut r = Raster::<Gray8>::new(sz, sz);
-        let mut m = Raster::<Mask8>::new(sz, sz);
+        let mut r = RasterBuilder::<SepSGrayAlpha8>::new().with_clear(sz, sz);
+        let mut m = RasterBuilder::<Mask8>::new().with_clear(sz, sz);
         let c = Gray8::from(100);
         m.set_pixel(0, 0, 255);
         m.set_pixel(sz - 1, sz - 1, 128);
-        b.iter(|| Raster::<Gray8>::mask_over(&mut r, &m, 0, 0, c))
+        b.iter(|| raster_over(&mut r, &m, c, 0, 0))
     });
 }
 
@@ -34,12 +32,12 @@ fn mask_over_gray_512(c: &mut Criterion) {
 fn mask_over_rgba(c: &mut Criterion, sz: u32) {
     let s = format!("mask_over_rgba_{}", sz);
     c.bench_function(&s, move |b| {
-        let mut r = Raster::<Rgba8>::new(sz, sz);
-        let mut m = Raster::<Mask8>::new(sz, sz);
-        let rgba: Rgba8 = Rgb::new(100, 50, 150, 255);
+        let mut r = RasterBuilder::<SepSRgba8>::new().with_clear(sz, sz);
+        let mut m = RasterBuilder::<Mask8>::new().with_clear(sz, sz);
+        let rgba: SepSRgba8 = Rgb::with_alpha(100, 50, 150, 255);
         m.set_pixel(0, 0, 255);
         m.set_pixel(sz - 1, sz - 1, 128);
-        b.iter(|| Raster::<Rgba8>::mask_over(&mut r, &m, 0, 0, rgba))
+        b.iter(|| raster_over(&mut r, &m, rgba, 0, 0))
     });
 }
 

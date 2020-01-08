@@ -2,13 +2,12 @@
 //
 // Copyright (c) 2019  Douglas P Lau
 //
-use crate::lerp::Lerp;
 use crate::Blend;
 use pix::{Alpha, Channel, Mask};
 
 impl<C, A> Blend for Mask<A>
 where
-    C: Channel + Lerp,
+    C: Channel,
     A: Alpha<Chan = C>,
     A: From<C>,
 {
@@ -22,15 +21,16 @@ where
         Self: From<B>,
     {
         for (bot, top) in dst.iter_mut().zip(src) {
-            let s = clr * Into::<Self>::into(*top);
+            let s = clr * Self::from(*top);
             *bot = Blend::over(*bot, s);
         }
     }
 
     /// Blend pixel on top of another, using `over`.
     fn over(dst: Self, src: Self) -> Self {
-        let t = src.alpha().value();
-        let value = dst.alpha().value().lerp(t, t);
-        Mask::new(value)
+        let one_minus_src_a = Self::Chan::MAX - src.alpha().value();
+        let a = src.alpha().value() + dst.alpha().value() * one_minus_src_a;
+
+        Mask::new(a)
     }
 }
