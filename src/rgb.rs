@@ -1,9 +1,12 @@
 // rgb.rs       Pixel operations for RGB pixel format.
 //
 // Copyright (c) 2019  Douglas P Lau
+// Copyright (c) 2020  Jeron Aldaron Lau
 //
 use crate::Blend;
-use pix::{Alpha, AssocRgb, Channel, GammaMode, Rgb, Format, AlphaMode, Translucent};
+use pix::{
+    Alpha, AlphaMode, AssocRgb, Channel, Format, GammaMode, Rgb, Translucent,
+};
 
 impl<C, A, M, G> Blend for Rgb<C, A, M, G>
 where
@@ -19,7 +22,11 @@ where
     /// * `src` Source pixels.
     /// * `clr` Mask color.
     fn over_fallback<B, H>(dst: &mut [Self], src: &[B], clr: Self)
-        where B: Format<Chan = H>, C: From<H>, H: Channel, H: From<C>
+    where
+        B: Format<Chan = H>,
+        C: From<H>,
+        H: Channel,
+        H: From<C>,
     {
         // Over operation requires alpha is Associated, translucency needed for
         // blending.
@@ -37,7 +44,11 @@ where
 
     /// Blend pixel on top of another, using "over".
     fn over<B, H>(dst: Self, src: B) -> Self
-        where B: Format<Chan = H>, C: From<H>, H: Channel, H: From<C>
+    where
+        B: Format<Chan = H>,
+        C: From<H>,
+        H: Channel,
+        H: From<C>,
     {
         let dst: AssocRgb<H, Translucent<H>, G> = dst.convert();
         let src: AssocRgb<H, Translucent<H>, G> = src.convert();

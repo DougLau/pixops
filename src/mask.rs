@@ -1,9 +1,10 @@
 // mask.rs      Pixel operations for alpha mask pixel format.
 //
 // Copyright (c) 2019  Douglas P Lau
+// Copyright (c) 2020  Jeron Aldaron Lau
 //
 use crate::Blend;
-use pix::{Alpha, Channel, Mask, Format};
+use pix::{Alpha, Channel, Format, Mask};
 
 impl<C, A> Blend for Mask<A>
 where
@@ -17,7 +18,11 @@ where
     /// * `src` Source pixels.
     /// * `clr` Mask color.
     fn over_fallback<B, H>(dst: &mut [Self], src: &[B], clr: Self)
-        where B: Format<Chan = H>, C: From<H>, H: Channel, H: From<C>
+    where
+        B: Format<Chan = H>,
+        C: From<H>,
+        H: Channel,
+        H: From<C>,
     {
         for (bot, top) in dst.iter_mut().zip(src) {
             // Apply mask color to source raster.
@@ -31,7 +36,11 @@ where
 
     /// Blend pixel on top of another, using "over".
     fn over<B, H>(dst: Self, src: B) -> Self
-        where B: Format<Chan = H>, Self::Chan: From<H>, H: Channel, H: From<C>
+    where
+        B: Format<Chan = H>,
+        Self::Chan: From<H>,
+        H: Channel,
+        H: From<C>,
     {
         let src: Self = src.convert();
 

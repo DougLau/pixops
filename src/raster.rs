@@ -1,9 +1,10 @@
 // raster.rs    A 2D raster image.
 //
 // Copyright (c) 2017-2019  Douglas P Lau
+// Copyright (c) 2020  Jeron Aldaron Lau
 //
 use crate::Blend;
-use pix::{Raster, Format, Channel};
+use pix::{Channel, Format, Raster};
 
 /// Blend targets with `over` operation.
 ///
@@ -22,7 +23,7 @@ pub fn raster_over<A, B, C, H>(
     A: Blend + From<C>,
     B: Format<Chan = H>,
     A::Chan: From<H>,
-    H: Channel + From<A::Chan>
+    H: Channel + From<A::Chan>,
 {
     let clr: A = clr.into();
     if x == 0
