@@ -1,14 +1,16 @@
 // gray.rs      Pixel operations for gray pixel format.
 //
 // Copyright (c) 2018-2019  Douglas P Lau
+// Copyright (c) 2020  Jeron Aldaron Lau
 //
-use crate::lerp::Lerp;
 use crate::Blend;
-use pix::{Alpha, AlphaMode, Channel, GammaMode, Gray};
+use pix::{
+    Alpha, AlphaMode, AssocGray, Channel, Format, GammaMode, Gray, Translucent,
+};
 
 impl<C, A, M, G> Blend for Gray<C, A, M, G>
 where
-    C: Channel + Lerp,
+    C: Channel,
     A: Alpha<Chan = C>,
     A: From<C>,
     M: AlphaMode,
@@ -19,21 +21,42 @@ where
     /// * `dst` Destination pixels.
     /// * `src` Source pixels.
     /// * `clr` Mask color.
-    fn over_fallback<B: Blend>(dst: &mut [Self], src: &[B], _clr: Self)
+    fn over_fallback<B, H>(dst: &mut [Self], src: &[B], clr: Self)
     where
-        Self: From<B>,
+        B: Format<Chan = H>,
+        C: From<H>,
+        H: Channel,
+        H: From<C>,
     {
+        // Over operation requires alpha is Associated, translucency needed for
+        // blending.
+        let clr: AssocGray<H, Translucent<H>, G> = clr.convert();
+
         for (bot, top) in dst.iter_mut().zip(src) {
-            let s = Self::from(*top);
-            *bot = Blend::over(*bot, s);
+            // Apply mask color to source raster.
+            let src: AssocGray<H, Translucent<H>, G> = top.convert();
+            let src = clr * src;
+
+            // Over Operation
+            *bot = Self::over(*bot, src);
         }
     }
 
-    /// Blend pixel on top of another, using `over`.
-    fn over(dst: Self, src: Self) -> Self {
-        let a = src.alpha().value();
-        let value = dst.value().lerp(src.value(), a);
-        let alpha = dst.alpha().value().lerp(a, a);
-        Gray::with_alpha(value, alpha)
+    /// Blend pixel on top of another, using "over".
+    fn over<B, H>(dst: Self, src: B) -> Self
+    where
+        B: Format<Chan = H>,
+        Self::Chan: From<H>,
+        H: Channel,
+        H: From<C>,
+    {
+        let dst: AssocGray<H, Translucent<H>, G> = dst.convert();
+        let src: AssocGray<H, Translucent<H>, G> = src.convert();
+
+        let one_minus_src_a = H::MAX - src.alpha().value();
+        let a = src.alpha().value() + dst.alpha().value() * one_minus_src_a;
+        let v = src.value() + dst.value() * one_minus_src_a;
+
+        AssocGray::<C, Translucent<C>, G>::with_alpha(v, a).convert()
     }
 }

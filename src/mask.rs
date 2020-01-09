@@ -1,14 +1,14 @@
 // mask.rs      Pixel operations for alpha mask pixel format.
 //
 // Copyright (c) 2019  Douglas P Lau
+// Copyright (c) 2020  Jeron Aldaron Lau
 //
-use crate::lerp::Lerp;
 use crate::Blend;
-use pix::{Alpha, Channel, Mask};
+use pix::{Alpha, Channel, Format, Mask};
 
 impl<C, A> Blend for Mask<A>
 where
-    C: Channel + Lerp,
+    C: Channel,
     A: Alpha<Chan = C>,
     A: From<C>,
 {
@@ -17,20 +17,36 @@ where
     /// * `dst` Destination pixels.
     /// * `src` Source pixels.
     /// * `clr` Mask color.
-    fn over_fallback<B: Blend>(dst: &mut [Self], src: &[B], clr: Self)
+    fn over_fallback<B, H>(dst: &mut [Self], src: &[B], clr: Self)
     where
-        Self: From<B>,
+        B: Format<Chan = H>,
+        C: From<H>,
+        H: Channel,
+        H: From<C>,
     {
         for (bot, top) in dst.iter_mut().zip(src) {
-            let s = clr * Into::<Self>::into(*top);
-            *bot = Blend::over(*bot, s);
+            // Apply mask color to source raster.
+            let src: Self = top.convert();
+            let src = clr * src;
+
+            // Over Operation
+            *bot = Self::over::<Self, C>(*bot, src);
         }
     }
 
-    /// Blend pixel on top of another, using `over`.
-    fn over(dst: Self, src: Self) -> Self {
-        let t = src.alpha().value();
-        let value = dst.alpha().value().lerp(t, t);
-        Mask::new(value)
+    /// Blend pixel on top of another, using "over".
+    fn over<B, H>(dst: Self, src: B) -> Self
+    where
+        B: Format<Chan = H>,
+        Self::Chan: From<H>,
+        H: Channel,
+        H: From<C>,
+    {
+        let src: Self = src.convert();
+
+        let one_minus_src_a = C::MAX - src.alpha().value();
+        let a = src.alpha().value() + dst.alpha().value() * one_minus_src_a;
+
+        Self::new(a)
     }
 }
