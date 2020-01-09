@@ -3,7 +3,7 @@
 // Copyright (c) 2017-2019  Douglas P Lau
 //
 use crate::Blend;
-use pix::Raster;
+use pix::{Raster, Format, Channel};
 
 /// Blend targets with `over` operation.
 ///
@@ -12,18 +12,17 @@ use pix::Raster;
 /// * `clr` Default blend color.
 /// * `x` Left position of source on destination.
 /// * `y` Top position of source on destination.
-pub fn raster_over<A, B, C>(
+pub fn raster_over<A, B, C, H>(
     dst: &mut Raster<A>,
     src: &Raster<B>,
     clr: C,
     x: i32,
     y: i32,
 ) where
-    A: Blend,
-    B: Blend,
-    C: Blend,
-    A: From<B>,
-    A: From<C>,
+    A: Blend + From<C>,
+    B: Format<Chan = H>,
+    A::Chan: From<H>,
+    H: Channel + From<A::Chan>
 {
     let clr: A = clr.into();
     if x == 0

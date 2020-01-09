@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2018-2019  Douglas P Lau
 //
-use pix::Format;
+use pix::{Format, Channel};
 
 /// Pixel format which can be blended.
 pub trait Blend: Format {
@@ -11,9 +11,8 @@ pub trait Blend: Format {
     /// * `dst` Destination pixels.
     /// * `src` Source pixels.
     /// * `clr` Mask color.
-    fn over_slice<B: Blend>(dst: &mut [Self], src: &[B], clr: Self)
-    where
-        Self: From<B>,
+    fn over_slice<B, H>(dst: &mut [Self], src: &[B], clr: Self)
+        where B: Format<Chan = H>, Self::Chan: From<H>, H: Channel, H: From<Self::Chan>
     {
         Self::over_fallback(dst, src, clr);
     }
@@ -23,10 +22,10 @@ pub trait Blend: Format {
     /// * `dst` Destination pixels.
     /// * `src` Source pixels.
     /// * `clr` Mask color.
-    fn over_fallback<B: Blend>(dst: &mut [Self], src: &[B], clr: Self)
-    where
-        Self: From<B>;
+    fn over_fallback<B, H>(dst: &mut [Self], src: &[B], clr: Self)
+        where B: Format<Chan = H>, Self::Chan: From<H>, H: Channel, H: From<Self::Chan>;
 
-    /// Blend pixel on top of another, using `over`.
-    fn over(dst: Self, src: Self) -> Self;
+    /// Blend pixel on top of another, using "over".
+    fn over<B, H>(dst: Self, src: B) -> Self
+        where B: Format<Chan = H>, Self::Chan: From<H>, H: Channel, H: From<Self::Chan>;
 }
