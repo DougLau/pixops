@@ -1,6 +1,6 @@
 [package]
 name = "pixops"
-version = "0.0.2"
+version = "0.1.0"
 authors = ["Douglas Lau <doug.p.lau@gmail.com>"]
 description = "Pixel / raster image operations"
 license = "MIT OR Apache-2.0"
@@ -12,7 +12,7 @@ keywords = ["image", "pixel", "compositing", "blend", "image-processing"]
 edition = "2018"
 
 [dependencies]
-pix = "0.7.0"
+pix = "0.8.0"
 
 [dev-dependencies]
 criterion = "0.3"
@@ -24,6 +24,3 @@ harness = false
 [features]
 default = ["simd"]
 simd = []
-
-[replace]
-"pix:0.7.0" = { path = "../pix" }
